@@ -1,0 +1,19 @@
+{
+  "name": "GitHub Filter",
+  "short_name": "GitHub Filter",
+  "version": "1.0",
+  "description": "Filter files in GitHub comparison",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": ["tabs", "activeTab", "declarativeContent", "storage"],
+  "page_action": {
+    "default_popup": "index.html"
+   },
+  "manifest_version": 2,
+  "content_scripts": [{
+    "matches": ["<all_urls>"],
+    "js": ["content.js"]
+  }]
+}

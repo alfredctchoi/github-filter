@@ -1,0 +1,11 @@
+.app {
+  min-width: 300px;
+}
+
+.app__title {
+  margin: 15px 20px 0 15px;
+}
+
+.app__form {
+  margin: 20px;
+}
