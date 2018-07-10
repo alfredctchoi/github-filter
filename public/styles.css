@@ -1,1 +1,16 @@
-.ghf-hide { display: none }
+.ghf-hide {
+  display: none;
+}
+
+.ghf__filtered_notification {
+  position: fixed;
+  top: 50px;
+  left: 50%;
+  margin-left: -100px;
+  background-color: black;
+  padding: 5px 15px;
+  color: white;
+  z-index: 1000;
+  text-align: center;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.2);
+}

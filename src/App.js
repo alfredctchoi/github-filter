@@ -12,8 +12,7 @@ class App extends Component {
     this.onChange = this.onChange.bind(this)
 
     this.state = {
-      filter: '',
-      filterType: ''
+      filter: ''
     }
   }
 
@@ -29,10 +28,9 @@ class App extends Component {
           return
         }
 
-        const { filter, filterType } = result[tabId]
+        const { filter } = result[tabId]
         this.setState({
-          filter,
-          filterType
+          filter
         })
       })
     })
@@ -45,27 +43,24 @@ class App extends Component {
 
   onChange(e) {
     e.preventDefault()
-    const { filterType: filterTypeEl, filter: filterEl } = this.form
-    const [filterType, filter] = [filterTypeEl.value, filterEl.value]
-    const values = { filter, filterType }
+    const { filter: filterEl } = this.form
+    const { value: filter } = filterEl
 
-    this.setState(values)
+    this.setState({ filter })
     window.chrome.tabs.query({ active: true, currentWindow: true }, tabs => {
       const tabId = tabs[0].id
       window.chrome.storage.local.set({
-        [tabId]: values
+        [tabId]: { filter }
       })
       window.chrome.tabs.sendMessage(tabId, {
         action: 'filter',
-        data: {
-          filters: [values]
-        }
+        data: { filter }
       })
     })
   }
 
   render() {
-    const { filter, filterType } = this.state
+    const { filter } = this.state
     return (
       <div className="app">
         <h4 className="app__title">GitHub File Filter</h4>
@@ -78,19 +73,7 @@ class App extends Component {
           autocomplete="off"
           role="presentation">
           <div className="form-group">
-            <label htmlFor="filterType">Filter Type</label>
-            <select
-              value={filterType}
-              className="form-control"
-              id="filterType"
-              name="filterType"
-              onChange={this.onChange}>
-              <option value="doesNotContain">does not contain</option>
-              <option value="contains">contains</option>
-            </select>
-          </div>
-          <div className="form-group">
-            <label htmlFor="filter">Filter Text</label>
+            <label htmlFor="filter">Filter Regex</label>
             <input
               value={filter}
               onChange={this.onChange}
@@ -98,7 +81,7 @@ class App extends Component {
               id="filter"
               type="text"
               name="filter"
-              placeholder="spec.js"
+              placeholder="^((?!spec).)*$"
             />
           </div>
         </form>
