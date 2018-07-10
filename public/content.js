@@ -13,16 +13,21 @@ const hideFileDiff = e => {
 }
 
 const filterFiles = ({ filters }) => {
-  const type = filters[0].type
+  const filterType = filters[0].filterType
   const filter = filters[0].filter
   const elements = document.querySelectorAll('.file-info > a')
+
+  if (!filter) {
+    return
+  }
+
   Array.from(elements).forEach(e => {
     const filename = e.text
-    if (type === 'contains' && !filename.includes(filter)) {
+    if (filterType === 'contains' && !filename.includes(filter)) {
       hideFileDiff(e)
     }
 
-    if (type === 'doesNotContain' && filename.includes(filter)) {
+    if (filterType === 'doesNotContain' && filename.includes(filter)) {
       hideFileDiff(e)
     }
   })
@@ -35,26 +40,9 @@ const clearFilters = () => {
 
 // Listen for messages
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
-  switch (msg.action) {
-    case 'filter':
-      clearFilters()
-      filterFiles(msg.data)
-      break;
-    case 'clear':
-      clearFilters()
-      break;
+  if (msg.action === 'filter') {
+    clearFilters()
+    filterFiles(msg.data)
   }
   sendResponse()
 })
-
-function init() {
-  const css = `
-    .${hideClass} { display: none }
-  `
-  const styleElement = document.createElement('style')
-  styleElement.type = 'text/css'
-  styleElement.appendChild(document.createTextNode(css))
-  document.head.appendChild(styleElement)
-}
-
-init()
