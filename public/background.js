@@ -8,7 +8,8 @@ chrome.runtime.onInstalled.addListener(function() {
         conditions: [
           new chrome.declarativeContent.PageStateMatcher({
             pageUrl: {
-              hostEquals: 'github.com'
+              hostEquals: 'github.com',
+              pathSuffix: 'files'
             }
           })
         ],
